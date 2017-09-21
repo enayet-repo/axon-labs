@@ -25,12 +25,12 @@ public class PresidentController {
 
     @GetMapping("/full-match")
     public void buildFullMatch() {
-        String aggregateIdentifier = UUID.randomUUID().toString();
-        commandGateway.send(new CreateMatchCommand(aggregateIdentifier));
-        commandGateway.send(new JoinMatchCommand(aggregateIdentifier));
-        commandGateway.send(new StartMatchCommand(aggregateIdentifier));
-        commandGateway.send(new PlayCardsCommand(aggregateIdentifier));
-        commandGateway.send(new PassCommand(aggregateIdentifier));
+        String matchId = UUID.randomUUID().toString();
+        commandGateway.send(new CreateMatchCommand(matchId));
+        commandGateway.send(new JoinMatchCommand(matchId));
+        String gameId = commandGateway.sendAndWait(new StartMatchCommand(matchId));
+        commandGateway.send(new PlayCardsCommand(matchId, gameId));
+        commandGateway.send(new PassCommand(matchId, gameId));
     }
 
     @GetMapping("/create-match")
@@ -40,24 +40,24 @@ public class PresidentController {
         return aggregateIdentifier;
     }
 
-    @GetMapping("/join-match/{aggregateIdentifier}")
-    public void joinMatch(@PathVariable String aggregateIdentifier) {
-        commandGateway.send(new JoinMatchCommand(aggregateIdentifier));
+    @GetMapping("/join-match/{matchId}")
+    public void joinMatch(@PathVariable String matchId) {
+        commandGateway.send(new JoinMatchCommand(matchId));
     }
 
-    @GetMapping("/start-match/{aggregateIdentifier}")
-    public void startMatch(@PathVariable String aggregateIdentifier) {
-        commandGateway.send(new StartMatchCommand(aggregateIdentifier));
+    @GetMapping("/start-match/{matchId}")
+    public void startMatch(@PathVariable String matchId) {
+        commandGateway.send(new StartMatchCommand(matchId));
     }
 
-    @GetMapping("/play-cards/{aggregateIdentifier}")
-    public void playCards(@PathVariable String aggregateIdentifier) {
-        commandGateway.send(new PlayCardsCommand(aggregateIdentifier));
+    @GetMapping("/play-cards/{matchId}/{gameId}")
+    public void playCards(@PathVariable String matchId, @PathVariable String gameId) {
+        commandGateway.send(new PlayCardsCommand(matchId, gameId));
     }
 
-    @GetMapping("/pass/{aggregateIdentifier}")
-    public void pass(@PathVariable String aggregateIdentifier) {
-        commandGateway.send(new PassCommand(aggregateIdentifier));
+    @GetMapping("/pass/{matchId}/{gameId}")
+    public void pass(@PathVariable String matchId, @PathVariable String gameId) {
+        commandGateway.send(new PassCommand(matchId, gameId));
     }
 
 }
