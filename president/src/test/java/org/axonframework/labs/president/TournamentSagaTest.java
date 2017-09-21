@@ -1,9 +1,16 @@
 package org.axonframework.labs.president;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.UUID;
 
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.test.saga.SagaTestFixture;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class TournamentSagaTest {
 
@@ -16,6 +23,25 @@ public class TournamentSagaTest {
     private static final String MATCH_ID_FOUR = UUID.randomUUID().toString();
 
     private SagaTestFixture<TournamentSaga> fixture = new SagaTestFixture<>(TournamentSaga.class);
+
+    private IdGenerator idGenerator;
+
+    @Before
+    public void setUp() throws Exception {
+        fixture.registerCommandGateway(CommandGateway.class);
+
+        idGenerator = mock(IdGenerator.class);
+        when(idGenerator.generateId()).thenReturn(MATCH_ID_ONE)
+                                      .thenReturn(MATCH_ID_TWO)
+                                      .thenReturn(MATCH_ID_THREE)
+                                      .thenReturn(MATCH_ID_FOUR);
+        fixture.registerResource(idGenerator);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Mockito.reset(idGenerator);
+    }
 
     @Test
     public void testOnTournamentCreatedEventASagaExists() throws Exception {
@@ -32,10 +58,10 @@ public class TournamentSagaTest {
                .whenPublishingA(new TournamentStartedEvent(TOURNAMENT_ID))
                .expectActiveSagas(1)
                .expectDispatchedCommands(
-                       new CreateMatchCommand(MATCH_ID_ONE, "matchOne"),
-                       new CreateMatchCommand(MATCH_ID_TWO, "matchTwo"),
-                       new CreateMatchCommand(MATCH_ID_THREE, "matchThree"),
-                       new CreateMatchCommand(MATCH_ID_FOUR, "matchFour")
+                       new CreateMatchCommand(MATCH_ID_ONE, "match0"),
+                       new CreateMatchCommand(MATCH_ID_TWO, "match1"),
+                       new CreateMatchCommand(MATCH_ID_THREE, "match2"),
+                       new CreateMatchCommand(MATCH_ID_FOUR, "match3")
                )
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_ONE)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_TWO)
@@ -64,15 +90,14 @@ public class TournamentSagaTest {
     public void testOnRoundStartedEventSagaPublishedFourStartMatchCommands() throws Exception {
         fixture.givenAggregate(TOURNAMENT_ID)
                .published(new TournamentCreatedEvent(TOURNAMENT_ID))
-               .andThenAPublished(new TournamentStartedEvent(TOURNAMENT_ID))
                .whenAggregate(TOURNAMENT_ID)
                .publishes(new RoundStartedEvent(TOURNAMENT_ID))
                .expectActiveSagas(1)
                .expectDispatchedCommands(
-                       new CreateMatchCommand(MATCH_ID_ONE, "matchOne"),
-                       new CreateMatchCommand(MATCH_ID_TWO, "matchTwo"),
-                       new CreateMatchCommand(MATCH_ID_THREE, "matchThree"),
-                       new CreateMatchCommand(MATCH_ID_FOUR, "matchFour")
+                       new CreateMatchCommand(MATCH_ID_ONE, "match0"),
+                       new CreateMatchCommand(MATCH_ID_TWO, "match1"),
+                       new CreateMatchCommand(MATCH_ID_THREE, "match2"),
+                       new CreateMatchCommand(MATCH_ID_FOUR, "match3")
                )
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_ONE)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_TWO)
