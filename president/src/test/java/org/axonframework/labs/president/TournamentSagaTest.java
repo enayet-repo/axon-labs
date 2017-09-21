@@ -1,5 +1,6 @@
 package org.axonframework.labs.president;
 
+import static org.axonframework.labs.president.TournamentSaga.MATCH_ID_ASSOCIATION_KEY;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,8 +14,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 public class TournamentSagaTest {
-
-    private static final String MATCH_ID_ASSOCIATION_KEY = "matchId";
 
     private static final String TOURNAMENT_ID = UUID.randomUUID().toString();
     private static final String MATCH_ID_ONE = UUID.randomUUID().toString();
