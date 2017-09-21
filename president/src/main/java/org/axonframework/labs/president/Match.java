@@ -41,8 +41,8 @@ public class Match {
     }
 
     @CommandHandler
-    public String handle(StartMatchCommand cmd) {
-        String gameId = UUID.randomUUID().toString();
+    public String handle(StartMatchCommand cmd, IdGenerator idGenerator) {
+        String gameId = idGenerator.generateId();
         apply(new GameStartedEvent(matchId, gameId));
         return gameId;
     }
