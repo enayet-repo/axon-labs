@@ -2,8 +2,6 @@ package org.axonframework.labs.president;
 
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
-import java.util.UUID;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -41,10 +39,8 @@ public class Match {
     }
 
     @CommandHandler
-    public String handle(StartMatchCommand cmd, IdGenerator idGenerator) {
-        String gameId = idGenerator.generateId();
-        apply(new GameStartedEvent(matchId, gameId));
-        return gameId;
+    public void handle(StartMatchCommand cmd) {
+        apply(new GameStartedEvent(matchId, cmd.getGameId()));
     }
 
     @EventSourcingHandler
