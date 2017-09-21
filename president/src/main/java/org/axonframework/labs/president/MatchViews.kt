@@ -8,10 +8,11 @@ data class MatchView @JvmOverloads constructor(
         @Id val matchId: String,
         var gameId: String? = null,
         var matchName: String,
-        var gameStatus: GameStatus = GameStatus.PENDING,
+        var gameStatus: Status = Status.PENDING,
+        var matchStatus: Status = Status.PENDING,
         var playerNames: MutableList<String> = mutableListOf()
 )
 
-enum class GameStatus {
+enum class Status {
     PENDING, STARTED, FINISHED
 }

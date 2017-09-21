@@ -48,7 +48,8 @@ public class MatchEventHandler {
         sseEmitter.send(event.toString());
 
         MatchView matchView = matchRepository.getOne(event.getMatchId());
-        matchView.setGameStatus(GameStatus.STARTED);
+        matchView.setGameStatus(Status.STARTED);
+        matchView.setMatchStatus(Status.STARTED);
         matchRepository.save(matchView);
     }
 
@@ -70,7 +71,7 @@ public class MatchEventHandler {
         sseEmitter.send(event.toString());
 
         MatchView matchView = matchRepository.getOne(event.getMatchId());
-        matchView.setGameStatus(GameStatus.FINISHED);
+        matchView.setGameStatus(Status.FINISHED);
         matchRepository.save(matchView);
     }
 
@@ -78,6 +79,10 @@ public class MatchEventHandler {
     public void on(MatchEndedEvent event) throws IOException {
         logger.info("Handling event {}", event);
         sseEmitter.send(event.toString());
+
+        MatchView matchView = matchRepository.getOne(event.getMatchId());
+        matchView.setMatchStatus(Status.FINISHED);
+        matchRepository.save(matchView);
     }
 
 }
