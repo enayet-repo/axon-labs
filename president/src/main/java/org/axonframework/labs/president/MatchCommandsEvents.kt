@@ -11,7 +11,8 @@ data class JoinMatchCommand(
 )
 
 data class StartMatchCommand(
-        @TargetAggregateIdentifier val matchId: String
+        @TargetAggregateIdentifier val matchId: String,
+        val gameId: String
 )
 
 data class PlayCardsCommand(
