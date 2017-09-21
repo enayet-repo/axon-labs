@@ -2,12 +2,17 @@ package org.axonframework.labs.president;
 
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.EntityId;
 
+@Entity
 public class Game {
 
     private final String matchId;
+    @Id
     @EntityId
     private final String gameId;
 
