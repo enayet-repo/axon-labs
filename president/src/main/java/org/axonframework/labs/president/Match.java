@@ -2,12 +2,18 @@ package org.axonframework.labs.president;
 
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
+@Entity
 @Aggregate
 public class Match {
 
+    @Id
     @AggregateIdentifier
     private String aggregateIdentifier;
 
@@ -33,6 +39,11 @@ public class Match {
 
     public void handle(PassCommand cmd) {
         apply(new PlayerPassedEvent(cmd.getAggregateIdentifier()));
+    }
+
+    @EventSourcingHandler
+    public void on(MatchCreatedEvent event) {
+        aggregateIdentifier = event.getAggregateIdentifier();
     }
 
 }
