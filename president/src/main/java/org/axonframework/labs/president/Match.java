@@ -2,8 +2,11 @@ package org.axonframework.labs.president;
 
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
+import java.util.UUID;
+
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.commandhandling.model.AggregateMember;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -11,7 +14,9 @@ import org.axonframework.spring.stereotype.Aggregate;
 public class Match {
 
     @AggregateIdentifier
-    private String aggregateIdentifier;
+    private String matchId;
+    @AggregateMember
+    private Game game;
 
     public Match() {
         // Required by Axon
@@ -19,32 +24,29 @@ public class Match {
 
     @CommandHandler
     public Match(CreateMatchCommand command) {
-        apply(new MatchCreatedEvent(command.getAggregateIdentifier()));
+        apply(new MatchCreatedEvent(command.getMatchId()));
     }
 
     @CommandHandler
     public void handle(JoinMatchCommand cmd) {
-        apply(new MatchJoinedEvent(cmd.getAggregateIdentifier()));
+        apply(new MatchJoinedEvent(matchId));
     }
 
     @CommandHandler
-    public void handle(StartMatchCommand cmd) {
-        apply(new GameStartedEvent(cmd.getAggregateIdentifier()));
-    }
-
-    @CommandHandler
-    public void handle(PlayCardsCommand cmd) {
-        apply(new CardsPlayedEvent(cmd.getAggregateIdentifier()));
-    }
-
-    @CommandHandler
-    public void handle(PassCommand cmd) {
-        apply(new PlayerPassedEvent(cmd.getAggregateIdentifier()));
+    public String handle(StartMatchCommand cmd) {
+        String gameId = UUID.randomUUID().toString();
+        apply(new GameStartedEvent(matchId, gameId));
+        return gameId;
     }
 
     @EventSourcingHandler
     public void on(MatchCreatedEvent event) {
-        aggregateIdentifier = event.getAggregateIdentifier();
+        matchId = event.getMatchId();
+    }
+
+    @EventSourcingHandler
+    public void on(GameStartedEvent event) {
+        game = new Game(matchId, event.getGameId());
     }
 
 }
