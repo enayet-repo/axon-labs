@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Saga
 public class TournamentSaga {
 
-    static final String TOURNAMENT_ID_ASSOCIATION_KEY = "tournamentId";
+    private static final String TOURNAMENT_ID_ASSOCIATION_KEY = "tournamentId";
     static final String MATCH_ID_ASSOCIATION_KEY = "matchId";
     static final Duration MATCH_DEADLINE = Duration.of(10, ChronoUnit.MINUTES);
 
