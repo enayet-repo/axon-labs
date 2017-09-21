@@ -28,7 +28,7 @@ public class Game {
 
     @CommandHandler
     public void handle(PassCommand cmd) {
-        apply(new PlayerPassedEvent(matchId, gameId));
+        apply(new PlayerPassedEvent(matchId, gameId, cmd.getPlayerName()));
     }
 
 }

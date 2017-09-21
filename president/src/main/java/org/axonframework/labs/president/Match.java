@@ -32,12 +32,12 @@ public class Match {
 
     @CommandHandler
     public Match(CreateMatchCommand command) {
-        apply(new MatchCreatedEvent(command.getMatchId()));
+        apply(new MatchCreatedEvent(command.getMatchId(), command.getMatchName()));
     }
 
     @CommandHandler
     public void handle(JoinMatchCommand cmd) {
-        apply(new MatchJoinedEvent(matchId));
+        apply(new MatchJoinedEvent(matchId, cmd.getPlayerName()));
     }
 
     @CommandHandler
