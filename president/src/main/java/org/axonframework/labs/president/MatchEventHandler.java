@@ -28,7 +28,7 @@ public class MatchEventHandler {
         logger.info("Handling event {}", event);
         sseEmitter.send(event.toString());
 
-        MatchView matchView = new MatchView(event.getMatchId(), event.getMatchId());
+        MatchView matchView = new MatchView(event.getMatchId(), null, event.getMatchId());
         matchRepository.save(matchView);
     }
 
