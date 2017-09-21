@@ -44,7 +44,7 @@ public class TournamentSagaTest {
     }
 
     @Test
-    public void testOnMatchEndedEventForAllMatchesEndsSaga() throws Exception {
+    public void testOnMatchEndedEventForAllMatchesSagaPublishesStartRoundCommand() throws Exception {
         fixture.givenAggregate(TOURNAMENT_ID)
                .published(new TournamentCreatedEvent(TOURNAMENT_ID))
                .andThenAPublished(new TournamentStartedEvent(TOURNAMENT_ID))
@@ -56,7 +56,38 @@ public class TournamentSagaTest {
                .published(new MatchEndedEvent(MATCH_ID_THREE))
                .whenAggregate(MATCH_ID_FOUR)
                .publishes(new MatchEndedEvent(MATCH_ID_FOUR))
-               .expectActiveSagas(0);
+               .expectActiveSagas(1)
+               .expectDispatchedCommands(new StartRoundCommand(TOURNAMENT_ID));
     }
 
+    @Test
+    public void testOnRoundStartedEventSagaPublishedFourStartMatchCommands() throws Exception {
+        fixture.givenAggregate(TOURNAMENT_ID)
+               .published(new TournamentCreatedEvent(TOURNAMENT_ID))
+               .andThenAPublished(new TournamentStartedEvent(TOURNAMENT_ID))
+               .whenAggregate(TOURNAMENT_ID)
+               .publishes(new RoundStartedEvent(TOURNAMENT_ID))
+               .expectActiveSagas(1)
+               .expectDispatchedCommands(
+                       new CreateMatchCommand(MATCH_ID_ONE, "matchOne"),
+                       new CreateMatchCommand(MATCH_ID_TWO, "matchTwo"),
+                       new CreateMatchCommand(MATCH_ID_THREE, "matchThree"),
+                       new CreateMatchCommand(MATCH_ID_FOUR, "matchFour")
+               )
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_ONE)
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_TWO)
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_THREE)
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_FOUR);
+    }
+
+    @Test
+    public void testOnTournamentFinishedEventSagaEnds() throws Exception {
+        fixture.givenAggregate(TOURNAMENT_ID)
+               .published(new TournamentCreatedEvent(TOURNAMENT_ID))
+               .andThenAPublished(new TournamentStartedEvent(TOURNAMENT_ID))
+               .whenAggregate(TOURNAMENT_ID)
+               .publishes(new TournamentFinishedEvent(TOURNAMENT_ID))
+               .expectActiveSagas(0)
+               .expectNoDispatchedCommands();
+    }
 }
