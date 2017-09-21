@@ -3,7 +3,8 @@ package org.axonframework.labs.president
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 
 data class CreateMatchCommand(
-        @TargetAggregateIdentifier val matchId: String
+        @TargetAggregateIdentifier val matchId: String,
+        val matchName: String
 )
 
 data class JoinMatchCommand(
@@ -26,7 +27,8 @@ data class PassCommand(
 )
 
 data class MatchCreatedEvent(
-        val matchId: String
+        val matchId: String,
+        val matchName: String
 )
 
 data class MatchJoinedEvent(
