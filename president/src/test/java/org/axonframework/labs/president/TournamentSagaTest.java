@@ -1,5 +1,6 @@
 package org.axonframework.labs.president;
 
+import static org.axonframework.labs.president.TournamentSaga.MATCH_DEADLINE;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,7 +67,8 @@ public class TournamentSagaTest {
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_ONE)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_TWO)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_THREE)
-               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_FOUR);
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_FOUR)
+               .expectScheduledEvent(MATCH_DEADLINE, new MatchTimeDeadLineReachedEvent(TOURNAMENT_ID));
     }
 
     @Test
@@ -102,7 +104,8 @@ public class TournamentSagaTest {
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_ONE)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_TWO)
                .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_THREE)
-               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_FOUR);
+               .expectAssociationWith(MATCH_ID_ASSOCIATION_KEY, MATCH_ID_FOUR)
+               .expectScheduledEvent(MATCH_DEADLINE, new MatchTimeDeadLineReachedEvent(TOURNAMENT_ID));
     }
 
     @Test
