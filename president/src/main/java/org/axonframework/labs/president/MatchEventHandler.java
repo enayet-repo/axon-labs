@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MatchEventHandler {
 
-    public static final Logger logger = LoggerFactory.getLogger(MatchEventHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(MatchEventHandler.class);
 
     @EventHandler
     public void on(MatchCreatedEvent event) {
