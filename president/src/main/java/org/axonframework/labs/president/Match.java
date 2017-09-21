@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Entity
@@ -21,8 +20,9 @@ public class Match {
         // Required by Axon
     }
 
-    public Match(CreateMatchCommand command) {
-        apply(new MatchCreatedEvent(command.getAggregateIdentifier()));
+    public Match(CreateMatchCommand cmd) {
+        apply(new MatchCreatedEvent(cmd.getAggregateIdentifier()));
+        aggregateIdentifier = cmd.getAggregateIdentifier();
     }
 
     public void handle(JoinMatchCommand cmd) {
@@ -39,11 +39,6 @@ public class Match {
 
     public void handle(PassCommand cmd) {
         apply(new PlayerPassedEvent(cmd.getAggregateIdentifier()));
-    }
-
-    @EventSourcingHandler
-    public void on(MatchCreatedEvent event) {
-        aggregateIdentifier = event.getAggregateIdentifier();
     }
 
 }
