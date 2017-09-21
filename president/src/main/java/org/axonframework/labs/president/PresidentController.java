@@ -28,7 +28,8 @@ public class PresidentController {
         String matchId = UUID.randomUUID().toString();
         commandGateway.send(new CreateMatchCommand(matchId));
         commandGateway.send(new JoinMatchCommand(matchId));
-        String gameId = commandGateway.sendAndWait(new StartMatchCommand(matchId));
+        String gameId = UUID.randomUUID().toString();
+        commandGateway.sendAndWait(new StartMatchCommand(matchId, gameId));
         commandGateway.send(new PlayCardsCommand(matchId, gameId));
         commandGateway.send(new PassCommand(matchId, gameId));
     }
@@ -45,9 +46,9 @@ public class PresidentController {
         commandGateway.send(new JoinMatchCommand(matchId));
     }
 
-    @GetMapping("/start-match/{matchId}")
-    public void startMatch(@PathVariable String matchId) {
-        commandGateway.send(new StartMatchCommand(matchId));
+    @GetMapping("/start-match/{matchId}/{gameId}")
+    public void startMatch(@PathVariable String matchId, @PathVariable String gameId) {
+        commandGateway.send(new StartMatchCommand(matchId, gameId));
     }
 
     @GetMapping("/play-cards/{matchId}/{gameId}")
