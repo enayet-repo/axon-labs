@@ -23,7 +23,8 @@ data class PlayCardsCommand(
 
 data class PassCommand(
         @TargetAggregateIdentifier val matchId: String,
-        val gameId: String
+        val gameId: String,
+        val playerName: String
 )
 
 data class MatchCreatedEvent(
