@@ -14,7 +14,7 @@ public class MatchController {
     private final CommandGateway commandGateway;
 
     @Autowired
-    public PresidentController(CommandGateway commandGateway) {
+    public MatchController(CommandGateway commandGateway) {
         this.commandGateway = commandGateway;
     }
 
