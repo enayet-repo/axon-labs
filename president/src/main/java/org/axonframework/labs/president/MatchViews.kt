@@ -1,8 +1,17 @@
 package org.axonframework.labs.president
 
-data class MatchView(
-        val matchId: String,
-        val gameId: String? = null,
-        val matchName: String,
-        val playerNames: MutableList<String> = mutableListOf()
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
+data class MatchView @JvmOverloads constructor(
+        @Id val matchId: String,
+        var gameId: String? = null,
+        var matchName: String,
+        var gameStatus: GameStatus = GameStatus.PENDING,
+        var playerNames: MutableList<String> = mutableListOf()
 )
+
+enum class GameStatus {
+    PENDING, STARTED, FINISHED
+}
