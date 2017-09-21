@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-public class PresidentController {
+public class MatchController {
 
     private final CommandGateway commandGateway;
     private final SseEmitter sseEmitter;
 
     @Autowired
-    public PresidentController(CommandGateway commandGateway,
-                               SseEmitter sseEmitter) {
+    public MatchController(CommandGateway commandGateway, SseEmitter sseEmitter) {
         this.commandGateway = commandGateway;
         this.sseEmitter = sseEmitter;
     }
