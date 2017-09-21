@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateMember;
+import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Entity
@@ -30,7 +31,6 @@ public class Match {
     @CommandHandler
     public Match(CreateMatchCommand cmd) {
         apply(new MatchCreatedEvent(cmd.getMatchId(), cmd.getMatchName()));
-        matchId = cmd.getMatchId();
     }
 
     @CommandHandler
@@ -41,7 +41,16 @@ public class Match {
     @CommandHandler
     public void handle(StartMatchCommand cmd) {
         apply(new GameStartedEvent(matchId, cmd.getGameId()));
-        game = new Game(matchId, cmd.getGameId());
+    }
+
+    @EventSourcingHandler
+    public void on(MatchCreatedEvent event) {
+        matchId = event.getMatchId();
+    }
+
+    @EventSourcingHandler
+    public void on(GameStartedEvent event) {
+        game = new Game(matchId, event.getGameId());
     }
 
 }
