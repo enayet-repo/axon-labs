@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Saga
 public class TournamentSaga {
 
-    static final String TOURNAMENT_ID_ASSOCIATION_KEY = "tournamentId";
+    private static final String TOURNAMENT_ID_ASSOCIATION_KEY = "tournamentId";
     static final String MATCH_ID_ASSOCIATION_KEY = "matchId";
 
     private static final Integer NUMBER_OF_MATCHES = 4;
