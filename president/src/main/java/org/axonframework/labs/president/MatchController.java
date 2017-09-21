@@ -10,17 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-public class PresidentController {
+public class MatchController {
 
     private final CommandGateway commandGateway;
     private final SseEmitter sseEmitter;
-    private final MatchRepository matchRepository;
 
     @Autowired
-    public PresidentController(CommandGateway commandGateway, SseEmitter sseEmitter, MatchRepository matchRepository) {
+    public MatchController(CommandGateway commandGateway, SseEmitter sseEmitter) {
         this.commandGateway = commandGateway;
         this.sseEmitter = sseEmitter;
-        this.matchRepository = matchRepository;
     }
 
     @GetMapping
@@ -68,11 +66,6 @@ public class PresidentController {
     @GetMapping("/pass/{matchId}/{gameId}/{playerName}")
     public void pass(@PathVariable String matchId, @PathVariable String gameId, @PathVariable String playerName) {
         commandGateway.send(new PassCommand(matchId, gameId, playerName));
-    }
-
-    @GetMapping("/{matchId}")
-    public MatchView getMatchView(@PathVariable String matchId) {
-        return matchRepository.getOne(matchId);
     }
 
 }
