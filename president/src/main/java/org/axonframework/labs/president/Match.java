@@ -4,17 +4,25 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateMember;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
+@Entity
 @Aggregate
 public class Match {
 
+    @Id
     @AggregateIdentifier
     private String matchId;
+    @OneToOne(cascade = CascadeType.ALL)
     @AggregateMember
     private Game game;
 
