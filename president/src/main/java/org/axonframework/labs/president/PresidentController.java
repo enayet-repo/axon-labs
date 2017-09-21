@@ -7,15 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 public class PresidentController {
 
     private final CommandGateway commandGateway;
+    private final SseEmitter sseEmitter;
 
     @Autowired
-    public PresidentController(CommandGateway commandGateway) {
+    public PresidentController(CommandGateway commandGateway,
+                               SseEmitter sseEmitter) {
         this.commandGateway = commandGateway;
+        this.sseEmitter = sseEmitter;
     }
 
     @GetMapping
@@ -24,13 +28,14 @@ public class PresidentController {
     }
 
     @GetMapping("/full-match")
-    public void buildFullMatch() {
+    public SseEmitter buildFullMatch() {
         String matchId = UUID.randomUUID().toString();
         commandGateway.send(new CreateMatchCommand(matchId));
         commandGateway.send(new JoinMatchCommand(matchId));
         String gameId = commandGateway.sendAndWait(new StartMatchCommand(matchId));
         commandGateway.send(new PlayCardsCommand(matchId, gameId));
         commandGateway.send(new PassCommand(matchId, gameId));
+        return sseEmitter;
     }
 
     @GetMapping("/create-match")
