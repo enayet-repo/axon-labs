@@ -7,7 +7,8 @@ data class CreateMatchCommand(
 )
 
 data class JoinMatchCommand(
-        @TargetAggregateIdentifier val matchId: String
+        @TargetAggregateIdentifier val matchId: String,
+        val playerName: String
 )
 
 data class StartMatchCommand(
@@ -29,13 +30,13 @@ data class MatchCreatedEvent(
 )
 
 data class MatchJoinedEvent(
-        val matchId: String
+        val matchId: String,
+        val playerName: String
 )
 
 data class GameStartedEvent(
         val matchId: String,
         val gameId: String
-
 )
 
 data class CardsPlayedEvent(
@@ -45,7 +46,8 @@ data class CardsPlayedEvent(
 
 data class PlayerPassedEvent(
         val matchId: String,
-        val gameId: String
+        val gameId: String,
+        val playerName: String
 )
 
 data class GameEndedEvent(
