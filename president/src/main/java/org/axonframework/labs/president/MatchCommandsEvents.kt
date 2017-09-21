@@ -3,39 +3,56 @@ package org.axonframework.labs.president
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 
 data class CreateMatchCommand(
-        @TargetAggregateIdentifier val aggregateIdentifier: String
+        @TargetAggregateIdentifier val matchId: String
 )
+
 data class JoinMatchCommand(
-        @TargetAggregateIdentifier val aggregateIdentifier: String
+        @TargetAggregateIdentifier val matchId: String
 )
+
 data class StartMatchCommand(
-        @TargetAggregateIdentifier val aggregateIdentifier: String
+        @TargetAggregateIdentifier val matchId: String
 )
+
 data class PlayCardsCommand(
-        @TargetAggregateIdentifier val aggregateIdentifier: String
+        @TargetAggregateIdentifier val matchId: String,
+        val gameId: String
 )
+
 data class PassCommand(
-        @TargetAggregateIdentifier val aggregateIdentifier: String
+        @TargetAggregateIdentifier val matchId: String,
+        val gameId: String
 )
 
 data class MatchCreatedEvent(
-        val aggregateIdentifier: String
+        val matchId: String
 )
+
 data class MatchJoinedEvent(
-        val aggregateIdentifier: String
+        val matchId: String
 )
+
 data class GameStartedEvent(
-        val aggregateIdentifier: String
+        val matchId: String,
+        val gameId: String
+
 )
+
 data class CardsPlayedEvent(
-        val aggregateIdentifier: String
+        val matchId: String,
+        val gameId: String
 )
+
 data class PlayerPassedEvent(
-        val aggregateIdentifier: String
+        val matchId: String,
+        val gameId: String
 )
+
 data class GameEndedEvent(
-        val aggregateIdentifier: String
+        val matchId: String,
+        val gameId: String
 )
+
 data class MatchEndedEvent(
-        val aggregateIdentifier: String
+        val matchId: String
 )
